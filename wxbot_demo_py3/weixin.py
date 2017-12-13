@@ -12,7 +12,7 @@ import time
 import ssl
 import re
 import sys
-import os
+import os,io
 import subprocess
 import random
 import multiprocessing
@@ -28,7 +28,7 @@ from socket import timeout as timeout_error
 # for media upload
 import mimetypes
 from requests_toolbelt.multipart.encoder import MultipartEncoder
-
+sys.stdout = io.TextIOWrapper(sys.stdout.buffer,encoding='utf-8')
 
 def catchKeyboardInterrupt(fn):
     def wrapper(*args):
@@ -105,7 +105,7 @@ class WebWeixin(object):
         self.GroupMemeberList = []  # 群友
         self.PublicUsersList = []  # 公众号／服务号
         self.SpecialUsersList = []  # 特殊账号
-        self.autoReplyMode = False
+        self.autoReplyMode = True
         self.syncHost = ''
         self.user_agent = 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_11_3) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/48.0.2564.109 Safari/537.36'
         self.interactive = False
@@ -798,7 +798,7 @@ class WebWeixin(object):
                 #    store
 #自己加的代码-------------------------------------------#
                 if self.autoReplyMode:
-                    ans = self._xiaodoubi(content) + '\n[微信机器人自动回复]'
+                    ans = self._xiaodoubi(content)# + '\n[微信机器人自动回复]'
                     if self.webwxsendmsg(ans, msg['FromUserName']):
                         print('自动回复: ' + ans)
                         logging.info('自动回复: ' + ans)
@@ -1155,10 +1155,11 @@ class WebWeixin(object):
         return ''
 
     def _xiaodoubi(self, word):
-        url = 'http://www.xiaodoubi.com/bot/chat.php'
+        url = "http://www.tuling123.com/openapi/api"#'http://www.xiaodoubi.com/bot/chat.php'
         try:
-            r = requests.post(url, data={'chat': word})
-            return r.content
+            r = requests.post(url, data={'key':"b8bb8bf591af8b522652fc2aa1e4a03a",'info':word,'userid':"odd2gjtRc-ohwDhgqi19sn5Z5kUE"})
+            kw=json.loads((r.text))["text"]
+            return kw
         except:
             return "让我一个人静静 T_T..."
 

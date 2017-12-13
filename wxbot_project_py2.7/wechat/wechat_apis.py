@@ -202,7 +202,7 @@ class WXAPI(object):
             data = post(url, params, False)
             if data == '':
                 return
-            qrcode_path = save_file('qrcode.jpg', data, './')
+            qrcode_path = save_file('qrcode.jpg', data, 'D:/gitrepos/WeixinBot/wxbot_project_py2.7/')
             os.startfile(qrcode_path)
         else:
             str2qr_terminal(self.wx_conf['API_qrcode'] + self.uuid)
