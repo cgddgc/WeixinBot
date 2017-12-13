@@ -813,6 +813,8 @@ class WebWeixin(object):
                 self._safe_open(image)
             elif msgType == 34:
                 voice = self.webwxgetvoice(msgid)
+                ans = self._xiaodoubi(content)
+                self.webwxsendmsg(ans, msg['FromUserName'])
                 raw_msg = {'raw_msg': msg,
                            'message': '%s 发了一段语音: %s' % (name, voice)}
                 self._showMsg(raw_msg)
